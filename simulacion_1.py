@@ -61,7 +61,11 @@ def source_encoder(image_source):
 
 		bkT = DecToBin(vT[i])
 		bfT += bkT
-	return vT, bfT
+
+	#to get bfT 1xk arrays in one vector
+	bfT2 = np.array(list(bfT)).astype(int)
+	bfT2 = np.array(np.split(bfT2, len(bfT)/8)) #each channel has 8bit
+	return vT, bfT, bfT2
 
 '''
 Una funcion que simula un canal de
@@ -70,14 +74,18 @@ secuencia de bits el codificador
 y altera aleatoreamente un porcen-
 taje de bits al azar.
 '''
-def noisy_channel(bits_chain):
+def noisy_channel(bits_chain, noise_perc):
 	
 	#variables: 
 	k = 0; bfR = ''
-
 	transport = list(bits_chain)
-	noise_size = np.random.random_integers(0, len(transport), (1000000))
-	noise = np.random.random_integers(0, 1, (1000000))
+	
+	#porcentaje de ruido:
+	noiseDeg = round(len(transport) * (noise_perc/100))
+
+	#generacion de indices y bits aleatoreos:
+	noise_size = np.random.random_integers(0, len(transport), (noiseDeg))
+	noise = np.random.random_integers(0, 1, (noiseDeg))
 	
 	for i in noise_size:
 		transport[i] = '{}'.format(noise[k]) 
@@ -113,28 +121,28 @@ def source_decoder(noised_bits, y, x, z):
 	bbk = np.array(np.split(np.array(vR), split_size))	
 	vR = np.reshape(bbk, (y, x, z))
 
-	return vR.astype(np.uint8)
+	return vR.astype(np.uint8), bbk
 
 #=====================================main======================================
 
+'''
 # 1. Se llama la fuente de informacion:
-raw_image = image_source('./img_scr/screen.png')
+raw_image = image_source('./img_scr/otro.jpeg')
 y, x, z = raw_image.shape 
 
 print(raw_image)
 
-'''
 # 2. Se codifican los canales r, g, b de cada pixel, en complemento a 1:
 vT, bfT = source_encoder(raw_image)
 
 #3. Se simula un canal con ruido 
-bfR  = noisy_channel(bfT)
+bfR  = noisy_channel(bfT, 5)
 
 # 4. Se decodifica la informacion entregada por el canal
 vR = source_decoder(bfR, y, x, z)
 
 # 5. Se reconstruye la imagen:
 img = Image.fromarray(vR)
-img.show()
+img.save('output2.jpg')
 '''
 	
