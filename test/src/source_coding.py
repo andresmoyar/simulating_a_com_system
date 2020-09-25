@@ -6,16 +6,11 @@ import numpy as np
 #	Jeaustin Sirias Chacon (jeaustin.sirias@ucr.ac.cr)	#
 #		      GitHub: JeaustinSirias			#
 #---------------------------------------------------------------#
-
-
 '''
 Este es un script que simula un sistema de comunicacion, considerando 4 
 etapas: fuente de informacion, un bloque de codificacion, un canal de
 transmision con ruido, 
 '''
-
-
-
 #=================================Funciones====================================
 
 '''
@@ -65,7 +60,7 @@ def source_encoder(image_source):
 	#to get bfT 1xk arrays in one vector
 	bfT2 = np.array(list(bfT)).astype(int)
 	bfT2 = np.array(np.split(bfT2, len(bfT)/8)) #each channel has 8bit
-	return vT, bfT2 #, bfT
+	return vT, bfT2, bfT
 
 '''
 Una funcion que simula un canal de
@@ -121,7 +116,7 @@ def source_decoder(noised_bits, y, x, z):
 	bbk = np.array(np.split(np.array(vR), split_size))	
 	vR = np.reshape(bbk, (y, x, z))
 
-	return vR.astype(np.uint8), np.array(split).shape
+	return vR.astype(np.uint8) #, np.array(split).shape
 
 def source_Decoder(arr, y, x, z):
 	rows, cols = arr.shape
@@ -146,23 +141,3 @@ def source_Decoder(arr, y, x, z):
 
 #=====================================main======================================
 
-'''
-# 1. Se llama la fuente de informacion:
-raw_image = image_source('./img_scr/teo.jpg')
-y, x, z = raw_image.shape 
-
-
-# 2. Se codifican los canales r, g, b de cada pixel, en complemento a 1:
-vT, r, bfT = source_encoder(raw_image)
-
-#3. Se simula un canal con ruido 
-bfR  = noisy_channel(bfT, 5)
-
-# 4. Se decodifica la informacion entregada por el canal
-vR = source_decoder(bfR, y, x, z)
-
-# 5. Se reconstruye la imagen:
-#img = Image.fromarray(vR)
-#img.show()
-'''
-	

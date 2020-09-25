@@ -12,7 +12,7 @@ Descripcion
 import numpy as np
 from PIL import Image
 import sys
-from primera_simulacion import *
+from source_coding import *
 
 #=================================Funciones====================================
 class com_sys():
@@ -88,11 +88,11 @@ class com_sys():
 
 		#Generando bits e indicies aleatorios:
 		x, y = bcT.shape
-		random_bits = np.random.randint(0, 2, size = (m, 1))
-		random_index = np.random.randint(0, y, size = (m, 1))
+		random_bits = np.random.randint(0, 2, size = (self.m, 1))
+		random_index = np.random.randint(0, y, size = (self.m, 1))
 
 		#se insertan los bits de error aleatoriamente:
-		for i in range(m):
+		for i in range(self.m):
 			idx = random_index[i]
 			bcT[i][idx] = random_bits[i]
 		
@@ -117,44 +117,3 @@ class com_sys():
 
 		return array.astype(int)
 	#=====================================================================
-
-
-#==============================MAIN======================================
-'''
-1. Se inicializa la fuente de informaciom
-y se llama al codificador de fuente
-'''
-fuente_info = image_source('./img_scr/dar.bmp')
-x, y, z = fuente_info.shape
-vT, bfT = source_encoder(fuente_info)
-
-'''
-2. Parametros dimensionales: m es el numero
-de paquetes 1xk obtenidos del codificador
-de fuente en bits; n > k
-'''
-m, k = bfT.shape
-n = 16
-
-'''
-3. Se inicializa el objeto sistema, que cuenta
-con codificador de canal, canal simetrico
-y decodificador de canal con correccion de e.
-'''
-sistema = com_sys(m, k, n) #Se crea el objeto sistema
-bcT = sistema.channel_encoder(bfT)
-bcR = sistema.bin_symmetrical_channel(bcT)
-#bfR = sistema.channel_decoder(bcR)
-bfR = np.array([bcR[i][8:] for i in range(len(bcR))])
-bfR = bfR.astype(str)
-
-'''
-4. Se llama al decodificador de fuente
-y se simula el sumidero para recuperar
-la imagen transmitida.
-'''
-vR = source_Decoder(bfR, x, y, z)
-sumidero = Image.fromarray(vR)
-sumidero.show()
-sumidero.save('./salida.jpg')
-
