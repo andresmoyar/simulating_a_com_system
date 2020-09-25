@@ -22,11 +22,11 @@ transmision con ruido,
 Una funcion que convierte base decimal
 a base binaria en complemento a 1
 '''
-def DecToBin(num):
+def DecToBin(num, limit):
 	bin_num = bin(num).replace('0b', '')
-	if len(bin_num) < 8:
+	if len(bin_num) < limit:
 		
-		missing_zeros = 8 - len(bin_num)
+		missing_zeros = limit - len(bin_num)
 		for i in range(missing_zeros):
 			bin_num = '0' + bin_num 
 	return bin_num
@@ -59,13 +59,13 @@ def source_encoder(image_source):
 
 	for i in range(len(vT)):
 
-		bkT = DecToBin(vT[i])
+		bkT = DecToBin(vT[i], 8)
 		bfT += bkT
 
 	#to get bfT 1xk arrays in one vector
 	bfT2 = np.array(list(bfT)).astype(int)
 	bfT2 = np.array(np.split(bfT2, len(bfT)/8)) #each channel has 8bit
-	return vT, bfT, bfT2
+	return vT, bfT2 #, bfT
 
 '''
 Una funcion que simula un canal de
@@ -121,19 +121,39 @@ def source_decoder(noised_bits, y, x, z):
 	bbk = np.array(np.split(np.array(vR), split_size))	
 	vR = np.reshape(bbk, (y, x, z))
 
-	return vR.astype(np.uint8), bbk
+	return vR.astype(np.uint8), np.array(split).shape
+
+def source_Decoder(arr, y, x, z):
+	rows, cols = arr.shape
+	#bits_list = np.array(list(noised_bits)) #cadena de caracteres a lista
+	dimGroups = rows #8-bits
+	split_size = int(dimGroups/3) #3 canales (r, g, b)
+	#split = np.split(bits_list, dimGroups)
+	
+	vR = []
+	for i in range(dimGroups):
+
+		bkR = ''
+		for j in range(8):
+			bkR += arr[i][j]
+		
+		vR.append(int(bkR, 2))
+			
+	bbk = np.array(np.split(np.array(vR), split_size))	
+	vR = np.reshape(bbk, (y, x, z))
+
+	return vR.astype(np.uint8)
 
 #=====================================main======================================
 
 '''
 # 1. Se llama la fuente de informacion:
-raw_image = image_source('./img_scr/otro.jpeg')
+raw_image = image_source('./img_scr/teo.jpg')
 y, x, z = raw_image.shape 
 
-print(raw_image)
 
 # 2. Se codifican los canales r, g, b de cada pixel, en complemento a 1:
-vT, bfT = source_encoder(raw_image)
+vT, r, bfT = source_encoder(raw_image)
 
 #3. Se simula un canal con ruido 
 bfR  = noisy_channel(bfT, 5)
@@ -142,7 +162,7 @@ bfR  = noisy_channel(bfT, 5)
 vR = source_decoder(bfR, y, x, z)
 
 # 5. Se reconstruye la imagen:
-img = Image.fromarray(vR)
-img.save('output2.jpg')
+#img = Image.fromarray(vR)
+#img.show()
 '''
 	
