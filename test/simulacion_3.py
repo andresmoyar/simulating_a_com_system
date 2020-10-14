@@ -13,9 +13,8 @@ CON CORRECCION DE ERRORES
 #Paquetes
 import numpy as np
 from PIL import Image
-import sys
-from src.channel_coding import *
-from src.source_coding import *
+from src.channel import *
+from src.source import *
 
 #==============================MAIN======================================
 '''
@@ -45,15 +44,14 @@ sistema = com_sys(m, k, n) #Se crea el objeto sistema
 bcT = sistema.channel_encoder(bfT)
 bcR = sistema.bin_symmetrical_channel(bcT)
 bfR = sistema.channel_decoder(bcR)
-#bfR = np.array([bcR[i][8:] for i in range(len(bcR))])
-#bfR = bfR.astype(str)
+
 
 '''
 4. Se llama al decodificador de fuente
 y se simula el sumidero para recuperar
 la imagen transmitida.
 '''
-vR = source_Decoder(bfR, x, y, z)
+vR = source_Decoder(bfR, x, y, True, 8)
 sumidero = Image.fromarray(vR)
 sumidero.show()
 #sumidero.save('./salida.jpg')

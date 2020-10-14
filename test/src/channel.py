@@ -11,8 +11,8 @@ Descripcion
 #Paquetes
 import numpy as np
 from PIL import Image
+from src.source import source_Decoder
 import sys
-from source_coding import *
 
 #=================================Funciones====================================
 class com_sys():
@@ -117,3 +117,14 @@ class com_sys():
 
 		return array.astype(int)
 	#=====================================================================
+
+	def modulator(self, bcT, y, x):
+
+		#De bits a simbolos
+		bcT = self.set_bin_matrix(bcT)
+		bcT = bcT.astype(str)
+		an = source_Decoder(bcT, y, x, False, 16)
+
+		#Modulacion digital PAM
+
+		return an

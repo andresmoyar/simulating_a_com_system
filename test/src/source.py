@@ -118,26 +118,27 @@ def source_decoder(noised_bits, y, x, z):
 
 	return vR.astype(np.uint8) #, np.array(split).shape
 
-def source_Decoder(arr, y, x, z):
+def source_Decoder(arr, y, x, img_like, bit_num):
 	rows, cols = arr.shape
-	#bits_list = np.array(list(noised_bits)) #cadena de caracteres a lista
 	dimGroups = rows #8-bits
 	split_size = int(dimGroups/3) #3 canales (r, g, b)
-	#split = np.split(bits_list, dimGroups)
 	
 	vR = []
 	for i in range(dimGroups):
 
 		bkR = ''
-		for j in range(8):
+		for j in range(bit_num):
 			bkR += arr[i][j]
 		
 		vR.append(int(bkR, 2))
-			
-	bbk = np.array(np.split(np.array(vR), split_size))	
-	vR = np.reshape(bbk, (y, x, z))
+	
+	if img_like == True:		
+		bbk = np.array(np.split(np.array(vR), split_size))	
+		vR = np.reshape(bbk, (y, x, 3))
+		return vR.astype(np.uint8)
 
-	return vR.astype(np.uint8)
+	else:
+		return vR
 
 #=====================================main======================================
 
