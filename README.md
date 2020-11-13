@@ -1,4 +1,4 @@
-# simulating_a_com_system
+# Comunication system simulation software
 El presente repositorio responde a la simulación de un sistema de comunicaciones tanto ideal como real, en la transmisión de imágenes a través de medios ruidosos. El proyecto cuenta con siete simulaciones que incluyen `codificación de fuente`, `codificación de canal`, `medios de transmisión` y `esquemas de modulación digital PAM/ASK`. Los componententes cubiertos en cada una de ellas contempla los siguientes componentes:
 1. Componente: Codificación de fuente
 2. Componente: codificación de fuente con canal binario simétrico
@@ -9,7 +9,7 @@ El presente repositorio responde a la simulación de un sistema de comunicacione
 7. Componente: codificación de fuente, codificación de canal y modulación paso banda en un medio con ruido
 8. Sistema de comunicaciones: codificación de fuente, codificación de canal, modulación y multiplexación en un medio con ruido`
 
-![Screenshot]()
+![Comunication system](https://github.com/JeaustinSirias/comunication_system_simulation_software/blob/master/docs/fuente.jpg)
 
 ## Uso de las simulaciones
 Para utilizar y valorar el funcionamiento de cada una de las simulaciones mostradas en la lista anterior inicie clonando este repositorio en algún directorio local de su computador utilizando la siguiente instrucción:
