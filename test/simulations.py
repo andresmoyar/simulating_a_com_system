@@ -8,6 +8,8 @@ from .context import source, channel, modulation, filepath
 path = filepath('data/', 'dar.bmp')[0]
 
 class sims():
+    '''Una clase que contiene todas la simulaciones realizadas hasta ahora
+    de forma progresiva con sus componentes'''
     #===============================================================================
     def simulation_1(self):
         # 1. Se llama la fuente de informacion:
